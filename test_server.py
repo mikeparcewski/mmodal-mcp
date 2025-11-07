@@ -56,13 +56,13 @@ async def test_server_import():
         return False
 
 async def test_console_script_entry_point():
-    """Test that the console script entry point (mmodal-stdio) works correctly."""
+    """Test that the console script entry point (mmodal-mcp) works correctly."""
     try:
-        print("Testing mmodal-stdio console script...")
+        print("Testing mmodal-mcp console script...")
 
         # Start the server process using the actual console script
         proc = subprocess.Popen(
-            [".venv/bin/mmodal-stdio"],
+            [".venv/bin/mmodal-mcp"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -79,7 +79,7 @@ async def test_console_script_entry_point():
             if proc.poll() is not None:
                 # Process died
                 _, stderr = proc.communicate()
-                print(f"✗ mmodal-stdio script crashed: {stderr}")
+                print(f"✗ mmodal-mcp script crashed: {stderr}")
                 return False
 
             # If still running after a reasonable time, consider it started
@@ -90,7 +90,7 @@ async def test_console_script_entry_point():
             time.sleep(0.1)
 
         if server_started and proc.poll() is None:
-            print("✓ mmodal-stdio console script started successfully")
+            print("✓ mmodal-mcp console script started successfully")
             proc.terminate()
             try:
                 proc.wait(timeout=2)
@@ -98,14 +98,14 @@ async def test_console_script_entry_point():
                 proc.kill()
             return True
         else:
-            print("✗ mmodal-stdio script failed to start")
+            print("✗ mmodal-mcp script failed to start")
             return False
 
     except FileNotFoundError:
-        print("✗ mmodal-stdio script not found in .venv/bin/")
+        print("✗ mmodal-mcp script not found in .venv/bin/")
         return False
     except Exception as e:
-        print(f"✗ Failed to test mmodal-stdio script: {e}")
+        print(f"✗ Failed to test mmodal-mcp script: {e}")
         return False
 
 
@@ -190,7 +190,7 @@ async def main_test():
     results.append(await test_server_import())
 
     # Test 3: Console script entry point
-    print("\n[Test 3] Console Script Entry Point (mmodal-stdio)")
+    print("\n[Test 3] Console Script Entry Point (mmodal-mcp)")
     results.append(await test_console_script_entry_point())
 
     # Test 4: CLI stdio transport
