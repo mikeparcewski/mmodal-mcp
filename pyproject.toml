@@ -1,0 +1,44 @@
+[project]
+name = "mmodal-mcp"
+version = "0.8.2"
+description = "Multimodal MCP server for generating images and describing assets across providers."
+authors = [
+  {name = "mmodal-mcp contributors"},
+]
+dependencies = [
+  "mcp[cli]>=1.20.0",
+  "pillow>=12.0.0",
+  "pydantic>=2.12.3",
+  "pydantic-settings>=2.6.1",
+  "python-dotenv>=1.2.1",
+  "python-docx>=1.1.2",
+  "python-pptx>=0.6.23",
+  "aiofiles>=25.1.0",
+  "litellm>=1.48.6",
+  "openpyxl>=3.1.5",
+  "pypdf>=5.1.0",
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = {text = "MIT"}
+
+[tool.pdm]
+distribution = false
+
+[tool.pdm.scripts]
+dev = "uvicorn main:mcp --reload --port 8000"
+mmodal-stdio = "mcp run main:mcp --transport stdio"
+mmodal-sse = "mcp run main:mcp --transport sse"
+mmodal-dev = "mcp dev main:mcp"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.4.2",
+  "pytest-asyncio>=1.2.0",
+  "pytest-mock>=3.14.0",
+]
