@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "mmodal-mcp"
 version = "0.8.2"
@@ -21,6 +25,19 @@ dependencies = [
 requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
+
+[tool.setuptools]
+py-modules = [
+  "cache",
+  "cleanup",
+  "config",
+  "describer",
+  "generator",
+  "main",
+  "storage",
+  "utils",
+  "validator",
+]
 
 [tool.pdm]
 distribution = false
