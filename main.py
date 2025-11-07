@@ -507,5 +507,29 @@ async def validate_asset_tool(input: ValidateAssetInput) -> ToolResponse:
     )
 
 
+def run_stdio():
+    """Entry point for stdio transport."""
+    import sys
+    sys.argv = ["mcp", "run", "main.py:mcp", "--transport", "stdio"]
+    from mcp.__main__ import main as mcp_main
+    mcp_main()
+
+
+def run_sse():
+    """Entry point for SSE transport."""
+    import sys
+    sys.argv = ["mcp", "run", "main.py:mcp", "--transport", "sse"]
+    from mcp.__main__ import main as mcp_main
+    mcp_main()
+
+
+def run_dev():
+    """Entry point for dev mode."""
+    import sys
+    sys.argv = ["mcp", "dev", "main.py:mcp"]
+    from mcp.__main__ import main as mcp_main
+    mcp_main()
+
+
 if __name__ == "__main__":
     mcp.run()
