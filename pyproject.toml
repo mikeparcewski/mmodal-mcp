@@ -40,9 +40,7 @@ py-modules = [
 ]
 
 [project.scripts]
-mmodal-stdio = "main:run_stdio"
-mmodal-sse = "main:run_sse"
-mmodal-dev = "main:run_dev"
+mmodal-mcp = "main:main"
 
 [tool.pdm]
 distribution = false

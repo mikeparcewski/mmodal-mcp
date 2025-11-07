@@ -25,7 +25,7 @@ The script launches the server via stdio, calls each tool, and prints sanitized 
 claude mcp add mmodal \
   -e LITELLM_DEFAULT_MODEL=gemini/imagen-4.0-generate-001 \
   -e LITELLM_DEFAULT_API_KEY=your-gemini-key \
-  -- uvx --from mmodal-mcp mmodal-stdio
+  -- uvx --from mmodal-mcp mmodal-mcp
 ```
 
 ### Claude Desktop (macOS / Windows)
@@ -34,7 +34,7 @@ claude mcp add mmodal \
 {
   "mmodal": {
     "command": "uvx",
-    "args": ["--from", "mmodal-mcp", "mmodal-stdio"],
+    "args": ["--from", "mmodal-mcp", "mmodal-mcp"],
     "env": {
       "LITELLM_DEFAULT_MODEL": "gemini/imagen-4.0-generate-001",
       "LITELLM_DEFAULT_API_KEY": "your-gemini-key"
@@ -52,7 +52,7 @@ Save in `~/Library/Application Support/Claude/mcp/config.json` (macOS) or `%APPD
   "mcpServers": {
     "mmodal": {
       "command": "uvx",
-      "args": ["--from", "mmodal-mcp", "mmodal-sse"],
+      "args": ["--from", "mmodal-mcp", "mmodal-mcp", "--transport", "sse"],
       "env": {
         "LITELLM_DEFAULT_MODEL": "gemini/imagen-4.0-generate-001",
         "LITELLM_DEFAULT_API_KEY": "your-gemini-key"
@@ -62,14 +62,14 @@ Save in `~/Library/Application Support/Claude/mcp/config.json` (macOS) or `%APPD
 }
 ```
 
-Switch to `mmodal-stdio` if the client expects stdio.
+Use `--transport stdio` if the client expects stdio (stdio is the default).
 
 ### OpenAI Codex CLI (`~/.codex/config.toml`)
 
 ```toml
 [mcp_servers.mmodal]
 command = "uvx"
-args = ["--from", "mmodal-mcp", "mmodal-stdio"]
+args = ["--from", "mmodal-mcp", "mmodal-mcp"]
 env = { LITELLM_DEFAULT_MODEL = "openai/dall-e-3", LITELLM_DEFAULT_API_KEY = "your-openai-key" }
 startup_timeout_ms = 20000
 ```
@@ -81,7 +81,7 @@ startup_timeout_ms = 20000
   "mcpServers": {
     "mmodal": {
       "command": "uvx",
-      "args": ["--from", "mmodal-mcp", "mmodal-stdio"],
+      "args": ["--from", "mmodal-mcp", "mmodal-mcp"],
       "env": {
         "LITELLM_DEFAULT_MODEL": "gemini/imagen-4.0-generate-001",
         "LITELLM_DEFAULT_API_KEY": "your-gemini-key"
@@ -280,12 +280,12 @@ The server will be available at `http://127.0.0.1:8000`.
 
 **MCP Transports:**
 
-Run the server via LiteLLM-aware MCP CLI helpers:
+Run the server with different transport options:
 
 ```bash
-uv run mmodal-stdio  # STDIO transport
-uv run mmodal-sse    # SSE endpoint (Server-Sent Events)
-uv run mmodal-dev    # Launch with MCP Inspector
+uv run mmodal-mcp                    # STDIO transport (default)
+uv run mmodal-mcp --transport sse    # SSE endpoint (Server-Sent Events)
+mcp dev main:mcp                     # Launch with MCP Inspector
 ```
 
 **Production Mode:**
@@ -327,7 +327,7 @@ This will run all the tests in the `tests/` directory and provide a report of th
 3. **Test the MCP server locally:**
    ```bash
    # Run with stdio transport
-   uv run mmodal-stdio
+   uv run mmodal-mcp
 
    # Or run the demo pipeline
    uv run python scripts/fastmcp_pipeline.py
