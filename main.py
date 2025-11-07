@@ -507,5 +507,10 @@ async def validate_asset_tool(input: ValidateAssetInput) -> ToolResponse:
     )
 
 
-if __name__ == "__main__":
+def main():
+    """Main entry point for mmodal-mcp CLI."""
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

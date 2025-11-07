@@ -39,6 +39,9 @@ py-modules = [
   "validator",
 ]
 
+[project.scripts]
+mmodal-mcp = "main:main"
+
 [tool.pdm]
 distribution = false
 
