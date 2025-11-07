@@ -25,7 +25,7 @@ The script launches the server via stdio, calls each tool, and prints sanitized 
 claude mcp add mmodal \
   -e LITELLM_DEFAULT_MODEL=gemini/imagen-4.0-generate-001 \
   -e LITELLM_DEFAULT_API_KEY=your-gemini-key \
-  -- uvx run mmodal-stdio
+  -- uvx --from mmodal-mcp mmodal-stdio
 ```
 
 ### Claude Desktop (macOS / Windows)
@@ -34,7 +34,7 @@ claude mcp add mmodal \
 {
   "mmodal": {
     "command": "uvx",
-    "args": ["run", "mmodal-stdio"],
+    "args": ["--from", "mmodal-mcp", "mmodal-stdio"],
     "env": {
       "LITELLM_DEFAULT_MODEL": "gemini/imagen-4.0-generate-001",
       "LITELLM_DEFAULT_API_KEY": "your-gemini-key"
@@ -52,7 +52,7 @@ Save in `~/Library/Application Support/Claude/mcp/config.json` (macOS) or `%APPD
   "mcpServers": {
     "mmodal": {
       "command": "uvx",
-      "args": ["run", "mmodal-sse"],
+      "args": ["--from", "mmodal-mcp", "mmodal-sse"],
       "env": {
         "LITELLM_DEFAULT_MODEL": "gemini/imagen-4.0-generate-001",
         "LITELLM_DEFAULT_API_KEY": "your-gemini-key"
@@ -69,7 +69,7 @@ Switch to `mmodal-stdio` if the client expects stdio.
 ```toml
 [mcp_servers.mmodal]
 command = "uvx"
-args = ["run", "mmodal-stdio"]
+args = ["--from", "mmodal-mcp", "mmodal-stdio"]
 env = { LITELLM_DEFAULT_MODEL = "openai/dall-e-3", LITELLM_DEFAULT_API_KEY = "your-openai-key" }
 startup_timeout_ms = 20000
 ```
@@ -81,7 +81,7 @@ startup_timeout_ms = 20000
   "mcpServers": {
     "mmodal": {
       "command": "uvx",
-      "args": ["run", "mmodal-stdio"],
+      "args": ["--from", "mmodal-mcp", "mmodal-stdio"],
       "env": {
         "LITELLM_DEFAULT_MODEL": "gemini/imagen-4.0-generate-001",
         "LITELLM_DEFAULT_API_KEY": "your-gemini-key"
