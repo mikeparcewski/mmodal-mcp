@@ -39,11 +39,6 @@ py-modules = [
   "validator",
 ]
 
-[project.scripts]
-mmodal-stdio = "main:run_stdio"
-mmodal-sse = "main:run_sse"
-mmodal-dev = "main:run_dev"
-
 [tool.pdm]
 distribution = false
 

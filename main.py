@@ -507,22 +507,5 @@ async def validate_asset_tool(input: ValidateAssetInput) -> ToolResponse:
     )
 
 
-def run_stdio():
-    """Entry point for stdio transport."""
-    mcp.run(transport="stdio")
-
-
-def run_sse():
-    """Entry point for SSE transport."""
-    mcp.run(transport="sse")
-
-
-def run_dev():
-    """Entry point for dev mode with MCP Inspector."""
-    import subprocess
-    import sys
-    subprocess.run([sys.executable, "-m", "mcp", "dev", "main:mcp"], check=True)
-
-
 if __name__ == "__main__":
     mcp.run()
