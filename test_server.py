@@ -55,10 +55,64 @@ async def test_server_import():
         print(f"✗ Unexpected error: {e}")
         return False
 
+async def test_console_script_entry_point():
+    """Test that the console script entry point (mmodal-stdio) works correctly."""
+    try:
+        print("Testing mmodal-stdio console script...")
+
+        # Start the server process using the actual console script
+        proc = subprocess.Popen(
+            [".venv/bin/mmodal-stdio"],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            cwd=Path(__file__).parent,
+            text=True
+        )
+
+        # Wait for server to be ready by reading initial output or checking if it's still alive
+        max_wait = 2.0  # seconds
+        start_time = time.time()
+        server_started = False
+
+        while time.time() - start_time < max_wait:
+            if proc.poll() is not None:
+                # Process died
+                _, stderr = proc.communicate()
+                print(f"✗ mmodal-stdio script crashed: {stderr}")
+                return False
+
+            # If still running after a reasonable time, consider it started
+            if time.time() - start_time > 0.3:
+                server_started = True
+                break
+
+            time.sleep(0.1)
+
+        if server_started and proc.poll() is None:
+            print("✓ mmodal-stdio console script started successfully")
+            proc.terminate()
+            try:
+                proc.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+            return True
+        else:
+            print("✗ mmodal-stdio script failed to start")
+            return False
+
+    except FileNotFoundError:
+        print("✗ mmodal-stdio script not found in .venv/bin/")
+        return False
+    except Exception as e:
+        print(f"✗ Failed to test mmodal-stdio script: {e}")
+        return False
+
+
 async def test_mcp_cli_stdio():
     """Test that the MCP server can be started via CLI with stdio transport."""
     try:
-        print("✓ Testing MCP CLI with stdio transport...")
+        print("Testing MCP CLI with stdio transport...")
 
         # Start the server process
         proc = subprocess.Popen(
@@ -67,27 +121,40 @@ async def test_mcp_cli_stdio():
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             cwd=Path(__file__).parent,
-            text=False
+            text=True
         )
 
-        # Give it a moment to start
-        time.sleep(0.5)
+        # Wait for server to be ready by checking if it stays alive
+        max_wait = 2.0  # seconds
+        start_time = time.time()
+        server_started = False
 
-        # Check if process is still running (no immediate crash)
-        if proc.poll() is None:
+        while time.time() - start_time < max_wait:
+            if proc.poll() is not None:
+                # Process died
+                _, stderr = proc.communicate()
+                print(f"✗ MCP server crashed: {stderr}")
+                return False
+
+            # If still running after a reasonable time, consider it started
+            if time.time() - start_time > 0.3:
+                server_started = True
+                break
+
+            time.sleep(0.1)
+
+        if server_started and proc.poll() is None:
             print("✓ MCP server started successfully with stdio transport")
             proc.terminate()
-            proc.wait(timeout=2)
+            try:
+                proc.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                proc.kill()
             return True
         else:
-            _, stderr = proc.communicate()
-            print(f"✗ MCP server failed to start: {stderr.decode()}")
+            print("✗ MCP server failed to start")
             return False
 
-    except subprocess.TimeoutExpired:
-        proc.kill()
-        print("✓ MCP server started successfully (timeout while terminating)")
-        return True
     except Exception as e:
         print(f"✗ Failed to start MCP server: {e}")
         return False
@@ -122,8 +189,12 @@ async def main_test():
     print("\n[Test 2] Server Import and Initialization")
     results.append(await test_server_import())
 
-    # Test 3: CLI stdio transport
-    print("\n[Test 3] MCP CLI with stdio transport")
+    # Test 3: Console script entry point
+    print("\n[Test 3] Console Script Entry Point (mmodal-stdio)")
+    results.append(await test_console_script_entry_point())
+
+    # Test 4: CLI stdio transport
+    print("\n[Test 4] MCP CLI with stdio transport")
     results.append(await test_mcp_cli_stdio())
 
     # Summary
