@@ -62,7 +62,7 @@ async def test_mcp_cli_stdio():
 
         # Start the server process
         proc = subprocess.Popen(
-            [".venv/bin/mcp", "run", "main.py:mcp", "--transport", "stdio"],
+            [str(Path(sys.executable).parent / "mcp"), "run", "main.py:mcp", "--transport", "stdio"],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
